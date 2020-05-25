@@ -1,0 +1,35 @@
+{
+  "name": "Floki",
+  "version": "1.0",
+  "description": "Build an Extension!",
+  "permissions": ["declarativeContent","activeTab","storage"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "page_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/icon.png",
+      "32": "images/icon.png",
+      "48": "images/icon.png",
+      "128": "images/icon.png"
+    }
+  },
+  "icons": {
+    "16": "images/icon.png",
+      "32": "images/icon.png",
+      "48": "images/icon.png",
+      "128": "images/icon.png"
+  },
+  "options_page": "options.html",
+  "content_scripts": [
+    {
+      "matches": ["http://www.youtube.com/*","https://www.youtube.com/*"],
+      "run_at": "document_idle",
+      "js": ["app.js"],
+      "css": ["app.css"]
+    }
+  ],
+  "manifest_version": 2
+}

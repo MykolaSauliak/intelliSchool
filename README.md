@@ -17,7 +17,9 @@ Students can then login and subscribe to the class.
 
 ## How we built it
 
-We used Angular to build the frontend of the web application and Javascript to build the browser plugin. Backend is built using Python. 'IBM Watson Speech to Text converter' is used to convert speech to text. We are using python packages such as nltk, gensim and our own Algorithms to automatically generate MCQ based quiz and smart notes from the speech in the video. 
+We used Angular to build the frontend of the web application and Javascript to build the browser plugin. Backend is built using Python and Redis. Redis is extensively used to make Speech to Text converter efficient and faster. We are using python packages such as nltk, gensim and our own Algorithms to automatically generate MCQ based quiz and smart notes from the speech in the video.
+
+![Architecture](https://github.com/msvdpriya/intelliSchool/blob/master/images/Architecture.png?raw=true)
 
 ## Challenges we ran into
 

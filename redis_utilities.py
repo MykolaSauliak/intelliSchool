@@ -19,3 +19,13 @@ def add_json(id,data):
 def get_json(id):
     return json.loads(strict_redis.get(str(id)))
 
+def file_exist(dictionary_name,key):
+    return redis.hexists(dictionary_name,key)
+
+def add_file_to_stream(stream_name,video_id,value):
+    stream_id = redis.xadd(stream_name, {'Summary': str(value).encode()})
+    add_dict(dictionary_name,stream_id,str(video_id).encode())
+    
+def get_file_from_stream(stream_name,video_id):
+    val = redis.xrange(stream_name, min=(redis.hget("map",video_id)), max=(redis.hget("map",'_5OvgQW6FG4')), count=None)
+    for k,v in dict(val).items():return (v[b'Value'])

@@ -17,9 +17,16 @@ Students can then login and subscribe to the class.
 
 ## How we built it
 
-We used Angular to build the frontend of the web application and Javascript to build the browser plugin. Backend is built using Python and Redis. Redis is extensively used to make Speech to Text converter efficient and faster. We are using python packages such as nltk, gensim and our own Algorithms to automatically generate MCQ based quiz and smart notes from the speech in the video.
+Backend is built using Python and Redis. We are using python packages such as nltk, gensim and our own Algorithms to automatically generate MCQ based quiz and smart notes from the speech in the video.
+
+We have implemented Event Driven architecture using Redis Streams and Redis Gears. This helped us improve the overall performance of our application. When a user uploads a video, we use ffmpeg to extract the audio. Then we split audio by silence, serialize it and add each chunk to Redis Streams. Redis Gears are triggered when each chunk is added to the stream and RedisGears passes each audio chunk to the "speech to text" module. The output(transcribed text) of each chunk from "speech to text" module is then added to Redis Streams. This will trigger RedisGears that will run our "quiz, notes and summary: generation module. Finally, "quiz, notes and summary" that are generated is formatted and stored as RedisJSON. Also, a Message is published to Redis Pub/Sub that will notify the user about completion of the job.
+
+We used Angular to build the frontend of the web application and Javascript to build the browser plugin.
 
 ![Architecture](https://github.com/msvdpriya/intelliSchool/blob/master/images/Architecture.png?raw=true)
+
+## What we used to build it?
+Redis Gears, Redis Streams, Redis Pub/Sub, RedisJSON, Redis Hash, Python, JavaScript, Angular, Typescript, nltk, gensim
 
 ## Challenges we ran into
 

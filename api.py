@@ -26,10 +26,11 @@ text_stream = 'Text_Stream'
 VTT_stream = 'VTT_Stream'
 
 #@app.route('/', methods=['GET'])
-video_id = str(uuid.uuid1().int) 
+#video_id = str(uuid.uuid1().int) 
 def home():
     #send video path instead of id
-    v = ''
+    v = request.args.get('v')
+    video_id = utilities.get_audio_fingerprint(v)
     print(video_id)
     #video_id = str(uuid.uuid1().int) 
 
@@ -47,7 +48,7 @@ def home():
     json_sentences = json.loads(ibm_speech_to_text.get_timestamped_data(video_id))
     prevJumpToTime = 0
 
-    questions = question_generator.generate_trivia(summary)
+    questions = question_generator.generate_trivia(summary,video_id)
     for question in questions:
         correct_index = question['correctIndex']
         correct_answer = question['answers'][correct_index] 

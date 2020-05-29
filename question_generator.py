@@ -5,13 +5,15 @@ import json
 from nltk.corpus import wordnet as wn
 from textblob import TextBlob
 import random
-
+import redis_utilities
+import common
 import re
 
 
 class Article:
-    def __init__(self, article):
+    def __init__(self, article,video_id):
         self.article = TextBlob(article)
+        self.video_id = video_id
         #self.page = wikipedia.page(title)
         #self.summary = TextBlob(self.page.summary)
 
@@ -23,6 +25,8 @@ class Article:
 
         trivia_sentences = []
         for sentence in sentences:
+            sent = {'video_id':self.video_id,'sent_num':sentences.index(sentence),'sentence':sentence}
+            redis_utilities.add_file_to_stream(common.important_sentences_stream,sent)
             trivia = self.evaluate_sentence(sentence)
             if trivia:
                 trivia_sentences.append(trivia)
@@ -126,11 +130,11 @@ class Article:
         return trivia
 
 
-def generate_trivia(article):
+def generate_trivia(article,video_id):
 
     questions = []
     
-    article = Article(article)
+    article = Article(article,video_id)
     generated_sentence = article.generate_trivia_sentences()
     if(generated_sentence):
         questions = questions + generated_sentence

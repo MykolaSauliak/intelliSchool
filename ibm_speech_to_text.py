@@ -11,7 +11,7 @@ service = SpeechToTextV1(authenticator=authenticator)
 service.set_service_url('XXXX')
 
 #audio is to be extracted as wav using ffmpeg(***very important)
-def get_transcript(audioFilePath):
+def transcribeFromFile(audioFilePath):
     with open(audioFilePath,'rb') as audio_file:
         #return could be changed,we can save to redi-json here,
         #but need to figure out unique id.
@@ -20,6 +20,13 @@ def get_transcript(audioFilePath):
                 audio=audio_file,
                 content_type='audio/wav').get_result(),
             indent=2))
+
+def transcribe(data):
+    
+    return service.recognize(
+                audio=data,
+                content_type='audio/wav'
+                ).get_result()
 
 def get_timestamped_data(video_id):
     maker = srtMaker.srtMakerFromText(video_id)   

@@ -15,7 +15,9 @@ import requests
 import common
 import redis_utilities
 import acoustid
-
+from pydub import AudioSegment
+from pydub.silence import split_on_silence
+import subprocess
 
 #initialize redis
 redis = redis.Redis(host='localhost')
@@ -97,9 +99,18 @@ def get_transcript(audioFilePath,video_id):
 def get_audio_fingerprint(path):
     return acoustid.fingerprint_file(path)
 
+def extract_audio(file):
+    command = "ffmpeg -i " + file + " -ab 160k -ac 2 -ar 44100 -vn " + file +".wav"
+    subprocess.call(command, shell=True)
 
+def split_audio(audio_file):
+    
+    audio = AudioSegment.from_wav(audio_file)
 
-# print(get_vtt_file('https://www.youtube.com/watch?v=_VhcZTGv0CU'))
-# print(get_audio_file('https://www.youtube.com/watch?v=UPBMG5EYydo'))
+    fragments = split_on_silence (
+        audio, 
+        min_silence_len = 1000,
+        silence_thresh = -16
+    )
 
-#get_transcript('','186244564239232521647980752872490925029')
+    return fragments

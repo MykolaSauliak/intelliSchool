@@ -130,7 +130,7 @@ class Article:
         return trivia
 
 
-def generate_trivia(article,video_id):
+def generate_quiz(article,video_id):
 
     questions = []
     
@@ -143,12 +143,3 @@ def generate_trivia(article,video_id):
     f.write(json.dumps(questions))
     f.close()'''
     return questions
-
-if __name__ == "__main__":  
-    res = generate_trivia("""A tonsillectomy is the surgical removal of the palantine tonsils.
-And adenoidectomy is the surgical removal of the adenoids.
-Tube will be temporarily inserted through your mouth and into your throat to help you breathe during the operation.
-Tonsillectomy's and adenoidectomy's are rarely done under local anesthesia in adults and never in children.
-The procedure for an adenoidectomy is very similar to that for a tonsillectomy.""")
-
-    print(res)

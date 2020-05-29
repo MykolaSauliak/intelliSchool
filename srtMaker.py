@@ -1,6 +1,6 @@
 import json
 import redis_utilities
-
+import common
 
 class srtMakerFromText(object):  
     """
@@ -36,6 +36,8 @@ class srtMakerFromText(object):
             tempChunk = []
             for i in range(nChunks):
                 begin = self._time2time(pieces[i][1][0])
+                chunk = {'video_id':self.fname,'chunk_num':i,'time':begin,'line':pieces[i][0]}
+                redis_utilities.add_file_to_stream(common.audio_stream,chunk)
                 tempChunk.append({"time": begin, "line":pieces[i][0] })
             #print(len(tempChunk))
             return tempChunk

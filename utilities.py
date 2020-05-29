@@ -14,6 +14,8 @@ from punctuator import Punctuator
 import requests
 import common
 import redis_utilities
+import acoustid
+
 
 #initialize redis
 redis = redis.Redis(host='localhost')
@@ -53,7 +55,7 @@ def get_audio_file(url):
 
     return video_id
 
-def get_vtt_file(url):
+def get_vtt_file(url,video_id):
     #video_id = ''.join (c for c in parse.parse_qs(parse.urlsplit(url).query)['v'])
     vtt_file_path = vtt_file_dir+video_id
 
@@ -77,31 +79,6 @@ def get_sec(time_str):
     """Get Seconds from time."""
     h, m, s = time_str.split(':')
     return int(h) * 3600 + int(m) * 60 + int(s)
-#type of paramteres must be bytes ,so converting string to bytes
-# adds file(dictionary) to stream with stream name
-def add_file_to_stream(stream_name,video_id,value):
-    stream_id = redis.xadd(stream_name, {'Summary': str(value).encode()})
-    add_value_to_dict(stream_id,str(video_id).encode())
-    return
-#type of paramteres must be bytes when passed
-#conversion from str to bytes is added to the method
-#jugaad for now
-def get_file_from_stream(stream_name,video_id):
-    val = redis.xrange(stream_name, min=(redis.hget("map",video_id)), max=(redis.hget("map",'_5OvgQW6FG4')), count=None)
-    for k,v in dict(val).items():return (v[b'Value'])
-
-#type of paramteres must be bytes when passed
-#conversion from str to bytes is added to the method
-def add_dict(dictionary_name,key,value):
-    redis.hmset(dictionary_name, {key:value})
-    return
-#type of paramteres must be bytes 
-#conversion from str to bytes is  added to the method
-def get_dict(dictionary_name,key):
-    return redis.hget(dictionary_name,str(key).encode())
-
-def file_exist(dictionary_name,video_id):
-    return redis.hexists(dictionary_name,video_id)
 
 #storing into unpunctuated_text_dir
 def get_transcript(audioFilePath,video_id):
@@ -116,6 +93,11 @@ def get_transcript(audioFilePath,video_id):
     punctuatedText = vtt_to_txt.punctuate_online(trancript_text)
     punctuatedText = vtt_to_txt.duplicate_punctuation(punctuatedText)
     redis_utilities.add_dict(common.summary_dictionary,video_id,punctuatedText)
+
+def get_audio_fingerprint(path):
+    return acoustid.fingerprint_file(path)
+
+
 
 # print(get_vtt_file('https://www.youtube.com/watch?v=_VhcZTGv0CU'))
 # print(get_audio_file('https://www.youtube.com/watch?v=UPBMG5EYydo'))

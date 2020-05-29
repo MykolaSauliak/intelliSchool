@@ -22,8 +22,8 @@ def get_json(id):
 def file_exist(dictionary_name,key):
     return r.hexists(dictionary_name,key)
 
-def add_file_to_stream(stream_name,key,value):
-    return r.xadd(stream_name, {key: str(value).encode()})
+def add_file_to_stream(stream_name,dict_value):
+    return r.xadd(stream_name, dict_value)
     
 def get_file_from_stream(stream_name,stream_id):
     return r.xrange(stream_name, min=stream_id, max=stream_id, count=None)

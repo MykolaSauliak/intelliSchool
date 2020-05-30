@@ -1,15 +1,3 @@
-"""
-Convert YouTube subtitles(vtt) to human readable text.
-
-Download only subtitles from YouTube with youtube-dl:
-youtube-dl  --skip-download --convert-subs vtt <video_url>
-
-Note that default subtitle format provided by YouTube is ass, which is hard
-to process with simple regex. Luckily youtube-dl can convert ass to vtt, which
-is easier to process.
-
-"""
-
 import sys
 import re
 import json
@@ -124,7 +112,6 @@ def convert_to_text(video_id):
     text_file_path = text_folder_path + video_id + '.txt'
     json_file_path = json_folder_path + video_id + '.json'
 
-    #changed here(from os.path exists)
     if utilities.file_exist(dictionary_name,video_id):
         return
     vtt_file_path = vtt_folder_path+video_id+'.en.vtt'

@@ -33,11 +33,10 @@ VTT_stream = 'VTT_Stream'
 
 #video_id = str(uuid.uuid1().int) 
 
-#@app.route('/quiz', methods=['GET'])
+@app.route('/quiz', methods=['GET'])
 def quiz():
 
     video_id = request.args.get('v')
-    #video_id = str(uuid.uuid1().int) 
 
     # get summary
     summary = summarizer.get_summary(str(redis_utilities.get_dict(common.summary_dictionary,video_id)))
@@ -64,7 +63,7 @@ def quiz():
     print(json.dumps(questions))
     redis_utilities.add_json(video_id,json.dumps(questions))
 
-#@app.route('/quiz', methods=['GET'])
+@app.route('/quiz', methods=['GET'])
 def youtube():
     video_id = request.args.get('v')
     if not video_id:
@@ -104,10 +103,9 @@ def youtube():
                 prevJumpToTime = json_sentence_time
                 break
 
-    # print(questions)
     return json.dumps(questions)
 
-#@app.route('/quiz', methods=['GET'])
+@app.route('/quiz', methods=['GET'])
 def notes():
     '''video_id = request.args.get('v')
     if not video_id:
@@ -156,7 +154,7 @@ def notes():
     response = {"notes": notes,"summary": summary}
     return json.dumps(response)
 
-# @app.route('/', methods = ['GET', 'POST'])
+@app.route('/', methods = ['GET', 'POST'])
 def home():
     if request.method == 'POST':
         file = request.files['file']
@@ -185,16 +183,10 @@ def home():
             }
         return response
 
-# @app.route('/status', methods = ['GET'])
+@app.route('/status', methods = ['GET'])
 def status():
     if request.method == 'GET':
         video_id = request.args.get('v')
         r = redis_utilities.subscribe('status:'+ video_id)
         for item in r.listen():
             return item['data']
-
-
-
-
-# print(home())
-# print(notes())
